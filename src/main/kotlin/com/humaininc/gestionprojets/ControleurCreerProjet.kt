@@ -72,8 +72,7 @@ class ControleurCreerProjet : ControleurAbstrait() {
     /**
      * Zone de texte de la description du projet.
      */
-    @FXML
-    private lateinit var descriptionProjet: TextArea
+    @FXML private lateinit var descriptionProjet: TextArea
 
     /**
      * Constructeur
