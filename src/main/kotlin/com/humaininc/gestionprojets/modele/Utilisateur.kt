@@ -1,4 +1,6 @@
-package com.humaininc.gestionprojets;
+package com.humaininc.gestionprojets.modele;
+
+import com.humaininc.gestionprojets.dao.Entite
 
 /**
  * Utilisateur du système.
@@ -8,12 +10,7 @@ package com.humaininc.gestionprojets;
  * @author Alexandre
  * @since 06/05/2023
  */
-class Utilisateur(id: Int, nom:String) {
-
-    /**
-     * Identifiant de l'utilisateur pour la base de données.
-     */
-    private val id: Int = id
+class Utilisateur(id: Int, nom:String) : Entite(id) {
 
     /**
      * Nom d'utilisateur dans le système.

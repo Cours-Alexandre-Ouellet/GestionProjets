@@ -1,5 +1,10 @@
 package com.humaininc.gestionprojets
 
+import com.humaininc.gestionprojets.dao.ProjetDAO
+import com.humaininc.gestionprojets.modele.Projet
+import com.humaininc.gestionprojets.modele.Utilisateur
+import com.humaininc.gestionprojets.service.ConteneurService
+import com.humaininc.gestionprojets.service.ServiceBD
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.fxml.FXML
@@ -23,24 +28,29 @@ import java.time.format.DateTimeParseException
 class ControleurCreerProjet : ControleurAbstrait() {
 
     /**
-     * Format de date attendu dans le système.
+     * Définit les messages de l'interface.
      */
-    private val FORMAT_DATE : String = "YYYY-MM-DD"
+    companion object {
+        /**
+         * Format de date attendu dans le système.
+         */
+        private val FORMAT_DATE: String = "YYYY-MM-DD"
 
-    /**
-     * Message d'erreur pour le nom de projet trop court.
-     */
-    private val MESSAGE_NOM_PROJET_COURT: String = "Le nom du projet doit comporter au moins 3 caractères."
+        /**
+         * Message d'erreur pour le nom de projet trop court.
+         */
+        private val MESSAGE_NOM_PROJET_COURT: String = "Le nom du projet doit comporter au moins 3 caractères."
 
-    /**
-     * Message d'erreur pour la date de fin avant la date de début.
-     */
-    private val MESSAGE_DATE_FIN_AVANT_DATE_DEBUT : String = "La date de fin doit être après la date de début."
+        /**
+         * Message d'erreur pour la date de fin avant la date de début.
+         */
+        private val MESSAGE_DATE_FIN_AVANT_DATE_DEBUT: String = "La date de fin doit être après la date de début."
 
-    /**
-     * Message d'erreur pour le format de la date.
-     */
-    private val MESSAGE_FORMAT_DATE_INVALIDE : String = "La date doit être entrée dans le format AAAA-MM-JJ"
+        /**
+         * Message d'erreur pour le format de la date.
+         */
+        private val MESSAGE_FORMAT_DATE_INVALIDE: String = "La date doit être entrée dans le format AAAA-MM-JJ"
+    }
 
     /**
      * Zone de texte pour saisir le nom du projet.
@@ -100,8 +110,10 @@ class ControleurCreerProjet : ControleurAbstrait() {
      */
     @FXML
     private fun creerProjet() {
-        val projet = Projet(0, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text)
-        println(projet)
+        val projet = Projet(null, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text, utilisateurConnecte!!)
+        val services = ConteneurService()
+
+        ProjetDAO(services.getService(ServiceBD::class) as ServiceBD).enregistrer(projet)
     }
 
     /**
