@@ -14,7 +14,9 @@ import javafx.fxml.FXML
  */
 class ControleurCreerProjet : ControleurAbstrait() {
 
-   
+    init {
+        this.utilisateurConnecte = Utilisateur(1, "Bob")
+    }
 
     @FXML private fun creerProjet() {
 
