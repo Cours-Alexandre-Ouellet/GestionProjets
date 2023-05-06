@@ -26,7 +26,7 @@
 
         <Label GridPane.columnIndex="0" GridPane.rowIndex="3">Date de fin*</Label>
         <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="dateFin" promptText="AAAA-MM-JJ"></DatePicker>
-        <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="erreurDateFim"></Label>
+        <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="erreurDateFin"></Label>
 
         <Label GridPane.columnIndex="0" GridPane.rowIndex="4">Description du projet</Label>
         <TextArea GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="descriptionProjet"></TextArea>
