@@ -30,7 +30,7 @@ class ProjetDAO(serviceBD: ServiceBD) : IDAO<Projet>(serviceBD) {
 
         requete.setString(1, entite.nomProjet)
         requete.setDate(2, Date.valueOf(entite.dateDebut))
-        requete.setDate(3, Date.valueOf(entite.dateDebut))
+        requete.setDate(3, Date.valueOf(entite.dateFin))
         requete.setString(4, entite.descriptionProjet)
         requete.setInt(5, entite.createur.id!!)
 

@@ -44,7 +44,7 @@ class ServiceBD : IService {
      * TODO : gérer les exceptions
      */
     fun ouvrirConnexion() : Connection {
-        if(!connexion?.isClosed){
+        if(this::connexion.isInitialized && !connexion.isClosed){
             fermerConnexion()
         }
 
