@@ -22,6 +22,9 @@ import java.time.format.DateTimeParseException
  */
 class ControleurCreerProjet : ControleurAbstrait() {
 
+    /**
+     * Format de date attendu dans le système.
+     */
     private val FORMAT_DATE : String = "YYYY-MM-DD"
 
     /**
@@ -111,6 +114,9 @@ class ControleurCreerProjet : ControleurAbstrait() {
 
     /**
      * Vérifie si la date, sous forme de chaîne de caractères, correspond au format de date prescrit par le système
+     *
+     * @param date la date à valider en format de chaîne de caractère.
+     * @return un booléen indiquant si la date est dans le format valide ou non.
      */
     private fun dateFormatValide(date: String) : Boolean {
         try {
