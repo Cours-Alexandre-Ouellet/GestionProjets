@@ -15,7 +15,7 @@ import java.sql.Statement
  * @author Alexandre
  * @since 06/05/2023
  */
-class ProjetDAO(serviceBD: ServiceBD) : IDAO<Projet>(serviceBD) {
+class ProjetDAO(serviceBD: ServiceBD) : DAOAbstraite<Projet>(serviceBD) {
 
     override fun enregistrer(entite: Projet) {
         val connexion = serviceBD.ouvrirConnexion()
