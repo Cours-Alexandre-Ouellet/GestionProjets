@@ -1,7 +1,5 @@
-package com.humaininc.gestionprojets
+package com.humaininc.gestionprojets.service
 
-import com.humaininc.gestionprojets.service.ConteneurService
-import com.humaininc.gestionprojets.service.IService
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
