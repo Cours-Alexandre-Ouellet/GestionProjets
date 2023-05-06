@@ -11,7 +11,7 @@ import com.humaininc.gestionprojets.service.ServiceBD
  * @author Alexandre
  * @since 06/05/2023
  */
-abstract class IDAO<T>(serviceBD : ServiceBD) where T : Entite{
+abstract class DAOAbstraite<T>(serviceBD : ServiceBD) where T : Entite{
 
     /**
      * Service de BD utilisé par la DAO

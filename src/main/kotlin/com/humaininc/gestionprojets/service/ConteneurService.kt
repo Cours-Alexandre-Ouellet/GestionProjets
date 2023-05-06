@@ -25,7 +25,7 @@ class ConteneurService {
      */
     fun <T> getService(classe: KClass<T>): IService where T : IService {
         for (service in services) {
-            if (service::class.isInstance(classe)) {
+            if (service::class == classe) {
                 return service
             }
         }
