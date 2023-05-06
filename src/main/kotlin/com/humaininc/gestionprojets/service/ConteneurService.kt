@@ -11,10 +11,12 @@ import kotlin.reflect.full.primaryConstructor
  */
 class ConteneurService {
 
-    /**
-     * Liste des services de l'application
-     */
-    private val services: MutableList<IService> = mutableListOf()
+    companion object {
+        /**
+         * Liste des services de l'application
+         */
+        val services: MutableList<IService> = mutableListOf()
+    }
 
     /**
      * Retourne le service demandé. Si le service n'existe pas, il est créé avant d'être retourné.
@@ -23,21 +25,21 @@ class ConteneurService {
      * @return le service qui a été créé
      * @exception Exception si le service n'a pu être créé
      */
-    fun <T> getService(classe: KClass<T>): IService where T : IService {
+    inline fun <reified T> getService(): IService where T : IService {
         for (service in services) {
-            if (service::class == classe) {
+            if (service::class == T::class) {
                 return service
             }
         }
 
         try {
-            val nouveauService: IService = classe.primaryConstructor!!.call()
+            val nouveauService: IService = T::class.primaryConstructor!!.call()
             services.add(nouveauService)
 
             return nouveauService
         } catch (exception: NullPointerException) {
             // TODO: spécialiser l'exception
-            throw  Exception("Impossible de créer le service de type : ${classe.simpleName}")
+            throw  Exception("Impossible de créer le service de type : ${T::class.simpleName}")
         }
 
     }

@@ -28,26 +28,26 @@ class ConteneurServiceTest {
     @Test
     fun testServiceSimple() {
         assertDoesNotThrow {
-            services.getService(DummyService1::class)
+            services.getService<DummyService1>()
         }
 
     }
 
     @Test
     fun testServiceMultiple() {
-        assertDoesNotThrow {
-            services.getService(DummyService1::class)
-            services.getService(DummyService2::class)
-            services.getService(DummyService3::class)
+       assertDoesNotThrow {
+            services.getService<DummyService1>()
+            services.getService<DummyService2>()
+            services.getService<DummyService3>()
         }
     }
 
     @Test
     fun testRequeteMultiple() {
-        val dummy1a: DummyService1 = services.getService(DummyService1::class) as DummyService1
-        services.getService(DummyService2::class)
-        services.getService(DummyService3::class)
-        val dummy1b: DummyService1 = services.getService(DummyService1::class) as DummyService1
+        val dummy1a: DummyService1 = services.getService<DummyService1>() as DummyService1
+        services.getService<DummyService2>()
+        services.getService<DummyService3>()
+        val dummy1b: DummyService1 = services.getService<DummyService1>() as DummyService1
 
         assertSame(dummy1a, dummy1b)
     }

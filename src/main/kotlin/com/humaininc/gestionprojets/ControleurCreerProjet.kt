@@ -113,7 +113,7 @@ class ControleurCreerProjet : ControleurAbstrait() {
         val projet = Projet(null, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text, utilisateurConnecte!!)
         val services = ConteneurService()
 
-        ProjetDAO(services.getService(ServiceBD::class) as ServiceBD).enregistrer(projet)
+        ProjetDAO(services.getService<ServiceBD>() as ServiceBD).enregistrer(projet)
     }
 
     /**
