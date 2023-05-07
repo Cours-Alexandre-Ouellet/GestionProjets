@@ -33,7 +33,7 @@
     </GridPane>
 
     <HBox nodeOrientation="RIGHT_TO_LEFT" spacing="10">
-        <Button onAction="#creerProjet">Démarrer le projet</Button>
+        <Button onAction="#creerProjet" fx:id="boutonSoumission" disable="true">Démarrer le projet</Button>
         <Button onAction="#annuler">Annuler</Button>
     </HBox>
 </VBox>

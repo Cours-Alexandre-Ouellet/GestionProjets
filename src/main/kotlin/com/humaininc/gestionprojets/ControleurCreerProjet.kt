@@ -8,10 +8,7 @@ import com.humaininc.gestionprojets.service.ServiceBD
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.fxml.FXML
-import javafx.scene.control.DatePicker
-import javafx.scene.control.Label
-import javafx.scene.control.TextArea
-import javafx.scene.control.TextField
+import javafx.scene.control.*
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
@@ -100,6 +97,12 @@ class ControleurCreerProjet : ControleurAbstrait() {
     private lateinit var descriptionProjet: TextArea
 
     /**
+     * Bouton de soumission du formulaire
+     */
+    @FXML
+    private lateinit var boutonSoumission: Button
+
+    /**
      * Constructeur
      * TODO : lire l'utilisateur connecté du controleur précédent
      */
@@ -113,21 +116,21 @@ class ControleurCreerProjet : ControleurAbstrait() {
     @FXML
     private fun initialize() {
         // Ajout les listener pour la validation des données
-        nomProjet.focusedProperty().addListener { _: ObservableValue<out Boolean>?, new: Boolean?, _: Boolean? ->
+        nomProjet.focusedProperty().addListener { _: ObservableValue<out Boolean>?, _: Boolean?, new: Boolean? ->
             run {
                 if (!new!!) {
                     validerNomProjet()
                 }
             }
         }
-        dateDebut.focusedProperty().addListener { _: ObservableValue<out Boolean>?, new: Boolean?, _: Boolean? ->
+        dateDebut.focusedProperty().addListener { _: ObservableValue<out Boolean>?, _: Boolean?, new: Boolean? ->
             run {
                 if (!new!!) {
                     validerDateDebut()
                 }
             }
         }
-        dateFin.focusedProperty().addListener { _: ObservableValue<out Boolean>?, new: Boolean?, _: Boolean? ->
+        dateFin.focusedProperty().addListener { _: ObservableValue<out Boolean>?, _: Boolean?, new: Boolean? ->
             run {
                 if (!new!!) {
                     validerDateFin()
@@ -142,9 +145,10 @@ class ControleurCreerProjet : ControleurAbstrait() {
     @FXML
     private fun creerProjet() {
         // La fonction and évite une évaluation du circuit le plus court et permet d'afficher tous les messages d'erreur
-        if(!(validerNomProjet() and validerDateDebut() and validerDateFin())) {
+        if (!(validerNomProjet() and validerDateDebut() and validerDateFin())) {
             return
         }
+        actualiserEtatBoutonSoumission()
 
         val projet =
             Projet(null, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text, utilisateurConnecte!!)
@@ -199,6 +203,7 @@ class ControleurCreerProjet : ControleurAbstrait() {
                 }
             }
 
+        actualiserEtatBoutonSoumission()
         return erreurNomProjet.text == null
     }
 
@@ -221,6 +226,7 @@ class ControleurCreerProjet : ControleurAbstrait() {
                 }
             }
 
+        actualiserEtatBoutonSoumission()
         return erreurDateDebut.text == null
     }
 
@@ -246,6 +252,15 @@ class ControleurCreerProjet : ControleurAbstrait() {
                 }
             }
 
+        actualiserEtatBoutonSoumission()
         return erreurDateFin.text == null
+    }
+
+    /**
+     * Désactive le bouton si l'un des champs obligatoires contient une erreur ou que sa valeur est nulle
+     */
+    private fun actualiserEtatBoutonSoumission() {
+        boutonSoumission.isDisable = erreurNomProjet.text != null || erreurDateDebut.text != null
+            erreurDateFin.text !=  null || nomProjet.text == null || dateDebut.value == null || dateFin.value == null
     }
 }
