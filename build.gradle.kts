@@ -19,6 +19,9 @@ application {
 
 dependencies {
     implementation("org.openjfx:javafx:21-ea+5")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.21")
+    implementation("com.mysql:mysql-connector-j:8.0.33")
+
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
