@@ -3,6 +3,7 @@ package com.humaininc.gestionprojets
 import com.humaininc.gestionprojets.dao.ProjetDAO
 import com.humaininc.gestionprojets.modele.Projet
 import com.humaininc.gestionprojets.service.ServiceBD
+import com.humaininc.gestionprojets.utils.FabriqueCelluleTableBouton
 import com.humaininc.gestionprojets.utils.PropertyValueFactoryStringAgregeeLectureSeule
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -62,6 +63,16 @@ class ControleurListerProjets : ControleurAbstrait() {
         createurs.cellValueFactory = PropertyValueFactoryStringAgregeeLectureSeule("createur.nom")
         datesDebut.cellValueFactory = PropertyValueFactory("dateDebut")
         datesFin.cellValueFactory = PropertyValueFactory("dateFin")
+        colOuvrir.cellFactory = FabriqueCelluleTableBouton<Projet> ("Ouvrir") {event ->
+            run {
+                println((event.source as Button).userData)
+            }
+        }
+        colSupprimer.cellFactory = FabriqueCelluleTableBouton<Projet> ("Supprimer") {event ->
+            run {
+                println((event.source as Button).userData)
+            }
+        }
 
         listeProjets.items.setAll(projets)
     }
