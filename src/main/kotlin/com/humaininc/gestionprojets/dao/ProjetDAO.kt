@@ -1,6 +1,7 @@
 package com.humaininc.gestionprojets.dao
 
 import com.humaininc.gestionprojets.modele.Projet
+import com.humaininc.gestionprojets.modele.Utilisateur
 import com.humaininc.gestionprojets.service.ServiceBD
 import java.sql.Date
 import java.sql.PreparedStatement
@@ -49,7 +50,25 @@ class ProjetDAO(serviceBD: ServiceBD) : DAOAbstraite<Projet>(serviceBD) {
 
 
     override fun chargerTout(): MutableList<Projet> {
-        TODO("Not yet implemented")
+        val connexion = serviceBD.ouvrirConnexion()
+        val requete: PreparedStatement = connexion.prepareStatement("SELECT * FROM Projet")
+        val resultats: ResultSet = requete.executeQuery()
+        val projets: MutableList<Projet> = mutableListOf()
+
+        while(resultats.next()){
+            projets.add(Projet(
+                resultats.getInt("id"),
+                resultats.getString("nom_projet"),
+                resultats.getDate("date_debut").toLocalDate(),
+                resultats.getDate("date_fin").toLocalDate(),
+                resultats.getString("description"),
+                // TODO : charger de la DAO d'utilisateurs
+                Utilisateur(resultats.getInt("createur"), "Bob")
+            ))
+        }
+
+        serviceBD.fermerConnexion()
+        return projets
     }
 
     override fun chargerParId(id: Int): Projet {

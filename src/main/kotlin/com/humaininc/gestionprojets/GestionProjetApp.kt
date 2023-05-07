@@ -15,9 +15,11 @@ import javafx.stage.Stage
 class GestionProjetApp : Application() {
 
     override fun start(stage: Stage) {
-        val parent : Parent = FXMLLoader.load(GestionProjetApp::class.java.getResource("creer_projet.fxml"))
-        stage.title = "Test"
-        stage.scene = Scene(parent, 400.0, 200.0)
+        val chargeur = FXMLLoader(GestionProjetApp::class.java.getResource("lister_projets.fxml"))
+        val parent : Parent = chargeur.load()
+        chargeur.getController<ControleurListerProjets>().initialiser(Contexte())
+        stage.title = "Gestion projets"
+        stage.scene = Scene(parent, 800.0, 800.0)
         stage.show()
     }
 
