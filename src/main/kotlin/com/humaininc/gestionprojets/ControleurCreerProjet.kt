@@ -31,61 +31,73 @@ class ControleurCreerProjet : ControleurAbstrait() {
      * Définit les messages de l'interface.
      */
     companion object {
+
+        private const val MESSAGE_NOM_PROJET_NULL: String = "Un nom de projet doit être saisi."
+        private const val MESSAGE_DATE_DEBUT_NULL: String = "Une date de début de projet doit être saisi."
+        private const val MESSAGE_DATE_FIN_NULL: String = "Une date de fin de projet doit être saisi."
+
         /**
          * Format de date attendu dans le système.
          */
-        private val FORMAT_DATE: String = "YYYY-MM-DD"
+        private const val FORMAT_DATE: String = "YYYY-MM-DD"
 
         /**
          * Message d'erreur pour le nom de projet trop court.
          */
-        private val MESSAGE_NOM_PROJET_COURT: String = "Le nom du projet doit comporter au moins 3 caractères."
+        private const val MESSAGE_NOM_PROJET_COURT: String = "Le nom du projet doit comporter au moins 3 caractères."
 
         /**
          * Message d'erreur pour la date de fin avant la date de début.
          */
-        private val MESSAGE_DATE_FIN_AVANT_DATE_DEBUT: String = "La date de fin doit être après la date de début."
+        private const val MESSAGE_DATE_FIN_AVANT_DATE_DEBUT: String = "La date de fin doit être après la date de début."
 
         /**
          * Message d'erreur pour le format de la date.
          */
-        private val MESSAGE_FORMAT_DATE_INVALIDE: String = "La date doit être entrée dans le format AAAA-MM-JJ"
+        private const val MESSAGE_FORMAT_DATE_INVALIDE: String = "La date doit être entrée dans le format AAAA-MM-JJ"
     }
 
     /**
      * Zone de texte pour saisir le nom du projet.
      */
-    @FXML private lateinit var nomProjet: TextField
+    @FXML
+    private lateinit var nomProjet: TextField
 
     /**
      * Message d'erreur pour le nom du projet
      */
-    @FXML private lateinit var erreurNomProjet: Label
+    @FXML
+    private lateinit var erreurNomProjet: Label
 
     /**
      * Contrôle de sélection de la date de début.
      */
-    @FXML private lateinit var dateDebut: DatePicker
+    @FXML
+    private lateinit var dateDebut: DatePicker
 
     /**
      * Message d'erreur de la date de début.
      */
-    @FXML private lateinit var erreurDateDebut: Label
+    @FXML
+    private lateinit var erreurDateDebut: Label
 
     /**
      * Contrôle de sélection de la date de fin.
      */
-    @FXML private lateinit var dateFin: DatePicker
+    @FXML
+    private lateinit var dateFin: DatePicker
 
     /**
      * Message d'erreur pour la date de fin
      */
-    @FXML private lateinit var erreurDateFin : Label
+    @FXML
+    private lateinit var erreurDateFin: Label
 
     /**
      * Zone de texte de la description du projet.
      */
-    @FXML private lateinit var descriptionProjet: TextArea
+    @FXML
+    private lateinit var descriptionProjet: TextArea
 
     /**
      * Constructeur
@@ -98,11 +110,30 @@ class ControleurCreerProjet : ControleurAbstrait() {
     /**
      * Fonction d'initilisation des champs de l'objet après la génération de l'interface
      */
-    @FXML private fun initialize() {
+    @FXML
+    private fun initialize() {
         // Ajout les listener pour la validation des données
-        nomProjet.focusedProperty().addListener(ValiderNomProjet())
-        dateDebut.focusedProperty().addListener(ValiderDateDebut())
-        dateFin.focusedProperty().addListener(ValiderDateFin())
+        nomProjet.focusedProperty().addListener { _: ObservableValue<out Boolean>?, new: Boolean?, _: Boolean? ->
+            run {
+                if (!new!!) {
+                    validerNomProjet()
+                }
+            }
+        }
+        dateDebut.focusedProperty().addListener { _: ObservableValue<out Boolean>?, new: Boolean?, _: Boolean? ->
+            run {
+                if (!new!!) {
+                    validerDateDebut()
+                }
+            }
+        }
+        dateFin.focusedProperty().addListener { _: ObservableValue<out Boolean>?, new: Boolean?, _: Boolean? ->
+            run {
+                if (!new!!) {
+                    validerDateFin()
+                }
+            }
+        }
     }
 
     /**
@@ -110,7 +141,13 @@ class ControleurCreerProjet : ControleurAbstrait() {
      */
     @FXML
     private fun creerProjet() {
-        val projet = Projet(null, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text, utilisateurConnecte!!)
+        // La fonction and évite une évaluation du circuit le plus court et permet d'afficher tous les messages d'erreur
+        if(!(validerNomProjet() and validerDateDebut() and validerDateFin())) {
+            return
+        }
+
+        val projet =
+            Projet(null, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text, utilisateurConnecte!!)
         val services = ConteneurService()
 
         ProjetDAO(services.getService<ServiceBD>() as ServiceBD).enregistrer(projet)
@@ -130,10 +167,10 @@ class ControleurCreerProjet : ControleurAbstrait() {
      * @param date la date à valider en format de chaîne de caractère.
      * @return un booléen indiquant si la date est dans le format valide ou non.
      */
-    private fun dateFormatValide(date: String) : Boolean {
+    private fun dateFormatValide(date: String): Boolean {
         try {
             DateTimeFormatter.ofPattern(FORMAT_DATE).parse(date)
-        } catch (exception : DateTimeParseException){
+        } catch (exception: DateTimeParseException) {
             return false
         }
 
@@ -142,53 +179,73 @@ class ControleurCreerProjet : ControleurAbstrait() {
 
     /**
      * Valide le nom du projet lorsque le focus est perdu sur le contrôle de nom.
+     *
+     * @return true si le nom est valide, false autrement
      */
-    inner class ValiderNomProjet : ChangeListener<Boolean> {
-        override fun changed(observable: ObservableValue<out Boolean>?, oldValue: Boolean?, newValue: Boolean?) {
-
-            if (!newValue!!) {
-                if (nomProjet.text.length < 3) {
-                    erreurNomProjet.text = MESSAGE_NOM_PROJET_COURT
-                } else if (false) {
-                    // TODO: Tester nom unique
-                } else {
-                    erreurNomProjet.text = null
+    private fun validerNomProjet(): Boolean {
+        erreurNomProjet.text =
+            when {
+                nomProjet.text == null -> {
+                    MESSAGE_NOM_PROJET_NULL
+                }
+                nomProjet.text.length < 3 -> {
+                    MESSAGE_NOM_PROJET_COURT
+                }
+                false -> {
+                    null
+                }
+                else -> {
+                    null
                 }
             }
-        }
+
+        return erreurNomProjet.text == null
     }
 
     /**
      * Valide la date de début lorsque le focus est perdu sur le contrôle de la date de début.
+     *
+     * @return true si la date est valide, false autrement
      */
-    inner class ValiderDateDebut : ChangeListener<Boolean> {
-        override fun changed(observable: ObservableValue<out Boolean>?, oldValue: Boolean?, newValue: Boolean?) {
-            if (!newValue!!) {
-                if (!dateFormatValide(dateDebut.editor.text)){
-                    erreurDateDebut.text = MESSAGE_FORMAT_DATE_INVALIDE
-                }  else {
-                    erreurDateDebut.text = null
+    private fun validerDateDebut(): Boolean {
+        erreurDateDebut.text =
+            when {
+                dateDebut.value == null -> {
+                    MESSAGE_DATE_DEBUT_NULL
+                }
+                !dateFormatValide(dateDebut.editor.text) -> {
+                    MESSAGE_FORMAT_DATE_INVALIDE
+                }
+                else -> {
+                    null
                 }
             }
-        }
+
+        return erreurDateDebut.text == null
     }
 
     /**
      * Valide la date de fin lorsque le focus est perdu sur le contrôle de la date de fin.
+     *
+     * @return true si la date est valide, false autrement
      */
-    inner class ValiderDateFin : ChangeListener<Boolean> {
-        override fun changed(observable: ObservableValue<out Boolean>?, oldValue: Boolean?, newValue: Boolean?) {
-            if (!newValue!!) {
-                if (!dateFormatValide(dateFin.editor.text)){
-                    erreurDateFin.text = MESSAGE_FORMAT_DATE_INVALIDE
+    private fun validerDateFin(): Boolean {
+        erreurDateFin.text =
+            when {
+                dateFin.value == null -> {
+                    MESSAGE_DATE_FIN_NULL
                 }
-                else if (dateDebut.value != null && dateFin.value != null && dateFin.value <= dateDebut.value) {
-                    erreurDateFin.text = MESSAGE_DATE_FIN_AVANT_DATE_DEBUT
+                !dateFormatValide(dateFin.editor.text) -> {
+                    MESSAGE_FORMAT_DATE_INVALIDE
                 }
-                else {
-                    erreurDateFin.text = null
+                dateDebut.value != null && dateFin.value <= dateDebut.value -> {
+                    MESSAGE_DATE_FIN_AVANT_DATE_DEBUT
+                }
+                else -> {
+                    null
                 }
             }
-        }
+
+        return erreurDateFin.text == null
     }
 }
