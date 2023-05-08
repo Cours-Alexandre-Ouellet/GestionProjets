@@ -15,6 +15,6 @@ class Utilisateur(id: Int, nom:String) : Entite(id) {
     /**
      * Nom d'utilisateur dans le système.
      */
-    private var nom: String = nom
+    var nom: String = nom
 
 }

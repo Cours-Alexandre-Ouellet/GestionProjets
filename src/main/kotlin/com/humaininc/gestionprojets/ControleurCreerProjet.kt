@@ -103,14 +103,6 @@ class ControleurCreerProjet : ControleurAbstrait() {
     private lateinit var boutonSoumission: Button
 
     /**
-     * Constructeur
-     * TODO : lire l'utilisateur connecté du controleur précédent
-     */
-    init {
-        this.utilisateurConnecte = Utilisateur(1, "Bob")
-    }
-
-    /**
      * Fonction d'initilisation des champs de l'objet après la génération de l'interface
      */
     @FXML
@@ -151,10 +143,9 @@ class ControleurCreerProjet : ControleurAbstrait() {
         actualiserEtatBoutonSoumission()
 
         val projet =
-            Projet(null, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text, utilisateurConnecte!!)
-        val services = ConteneurService()
+            Projet(null, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text, contexte.utilisateurConnecte!!, true)
 
-        ProjetDAO(services.getService<ServiceBD>() as ServiceBD).enregistrer(projet)
+        ProjetDAO(contexte.services.getService<ServiceBD>() as ServiceBD).enregistrer(projet)
     }
 
     /**
