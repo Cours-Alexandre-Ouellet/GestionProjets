@@ -21,22 +21,26 @@ abstract class ControleurAbstrait {
     /**
      * Initialiser le contexte du d'exécution.
      */
-    fun initialiser(contexte: Contexte) {
+    @Suppress("UNCHECKED_CAST")
+    fun <T : ControleurAbstrait> initialiser(contexte: Contexte, init: ((controleur: T) -> Nothing)? = null) {
         this.contexte = contexte
+
+        init?.invoke(this as T)
     }
 
     /**
      * Charge une vue FXML et l'affiche dans la scène.
      *
      * @param stage le stage dans lequel faire l'affichage.
-     * @param chemin le chemin duquel charger la vue.
+     * @param cheminVue le chemin duquel charger la vue.
      * @param nomFenetre le nom de la fenêtre après le rechargement. Si null, le nom n'est pas changé.
+     * @param init fonction qui s'exécute sur le contrôleur avant l'affichage de la fenêtre.
      */
-    protected fun chargerVue(stage: Stage, chemin: String, nomFenetre: String? = null) {
-        val chargeur = FXMLLoader(ControleurAbstrait::class.java.getResource("creer_projet.fxml"))
+    protected fun <T : ControleurAbstrait> chargerVue(stage: Stage, cheminVue: String, nomFenetre: String? = null, init: ((controleur: T) -> Nothing)? = null) {
+        val chargeur = FXMLLoader(ControleurAbstrait::class.java.getResource(cheminVue))
         val parent: Parent = chargeur.load()
-
-        chargeur.getController<ControleurAbstrait>().initialiser(Contexte())
+        val controleur: ControleurAbstrait = chargeur.getController()
+        controleur.initialiser(Contexte(), init)
 
         if (nomFenetre != null) {
             stage.title = nomFenetre
