@@ -7,6 +7,8 @@ import com.humaininc.gestionprojets.service.ConteneurService
 import com.humaininc.gestionprojets.service.ServiceBD
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
+import javafx.event.ActionEvent
+import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import java.time.format.DateTimeFormatter
@@ -103,6 +105,12 @@ class ControleurCreerProjet(contexte: Contexte) : ControleurAbstrait(contexte) {
     private lateinit var boutonSoumission: Button
 
     /**
+     * Bouton pour annuler la création d'un projet
+     */
+    @FXML
+    private lateinit var boutonAnnulerOperation : Button
+
+    /**
      * Fonction d'initilisation des champs de l'objet après la génération de l'interface
      */
     @FXML
@@ -129,6 +137,10 @@ class ControleurCreerProjet(contexte: Contexte) : ControleurAbstrait(contexte) {
                 }
             }
         }
+
+        // initalisation des actions des boutons
+        boutonSoumission.onAction = EventHandler { creerProjet() }
+        boutonAnnulerOperation.onAction = EventHandler { annuler() }
     }
 
     /**
