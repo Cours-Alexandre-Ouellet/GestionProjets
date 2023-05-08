@@ -63,6 +63,7 @@ class ControleurListerProjets : ControleurAbstrait() {
             ).chargerTout()
         ))
 
+        // Définition des colonnes de la table
         nomsProjet.cellValueFactory = PropertyValueFactory("nomProjet")
         createurs.cellValueFactory = PropertyValueFactoryStringAgregeeLectureSeule("createur.nom")
         datesDebut.cellValueFactory = PropertyValueFactory("dateDebut")
@@ -78,14 +79,12 @@ class ControleurListerProjets : ControleurAbstrait() {
             }
         }
 
-        listeProjets.items.setAll(projets)
-
         // Gestion de l'affichage des projets innactifs
         afficherProjetsClos.selectedProperty().addListener { _, _, nouvelleValeur ->
             filtrerProjets(nouvelleValeur)
         }
 
-        filtrerProjets(afficherProjetsClos.isSelected)
+        filtrerProjets(afficherProjetsClos.isSelected)      // Ajoute en même temps les projets au TableView
     }
 
     /**
