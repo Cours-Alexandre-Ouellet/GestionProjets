@@ -10,9 +10,9 @@ import javafx.scene.control.Label
  * @author Alexandre
  * @since 07/05/2023
  */
-class ControleurAfficherProjet : ControleurAbstrait() {
+class ControleurAfficherProjet(contexte: Contexte, projet: Projet) : ControleurAbstrait(contexte) {
 
-    private lateinit var projet: Projet
+    private val projet: Projet = projet
 
     @FXML
     private lateinit var nomProjet: Label
