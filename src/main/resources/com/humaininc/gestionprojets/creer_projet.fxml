@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.humaininc.gestionprojets.ControleurCreerProjet"
-        minHeight="800" minWidth="800" spacing="30">
+      minHeight="800" minWidth="800" spacing="30">
 
     <GridPane hgap="10" vgap="10">
         <Label GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="0">Démarrer un projet</Label>
@@ -33,7 +28,7 @@
     </GridPane>
 
     <HBox nodeOrientation="RIGHT_TO_LEFT" spacing="10">
-        <Button onAction="#annuler">Annuler</Button>
-        <Button onAction="#creerProjet" fx:id="boutonSoumission" disable="true">Démarrer le projet</Button>
+        <Button fx:id="boutonAnnulerOperation">Annuler</Button>
+        <Button fx:id="boutonSoumission" disable="true">Démarrer le projet</Button>
     </HBox>
 </VBox>
