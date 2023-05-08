@@ -25,7 +25,8 @@ CREATE TABLE projet (
  */
 INSERT INTO Utilisateur (nom) VALUES ('Bob');
 
-INSERT INTO Projet (nom_projet, date_debut, date_fin, description, createur) VALUES
-	('Test 1', '2023-05-04', '2023-06-15', '', 1),
-    ('Projet de Bob', '2023-05-30', '2028-05-18', 'DESC', 1);
+INSERT INTO Projet (nom_projet, date_debut, date_fin, description, createur, actif) VALUES
+	('Test 1', '2023-05-04', '2023-06-15', '', 1, TRUE),
+    ('Projet de Bob', '2023-05-30', '2028-05-18', 'DESC', 1, TRUE),
+    ('Projet de Bob', '2022-07-12', '2022-05-18', 'DESC', 1, FALSE);
 

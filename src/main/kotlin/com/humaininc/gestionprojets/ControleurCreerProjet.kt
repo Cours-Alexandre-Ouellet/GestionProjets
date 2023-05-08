@@ -143,7 +143,7 @@ class ControleurCreerProjet : ControleurAbstrait() {
         actualiserEtatBoutonSoumission()
 
         val projet =
-            Projet(null, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text, contexte.utilisateurConnecte!!)
+            Projet(null, nomProjet.text, dateDebut.value, dateFin.value, descriptionProjet.text, contexte.utilisateurConnecte!!, true)
 
         ProjetDAO(contexte.services.getService<ServiceBD>() as ServiceBD).enregistrer(projet)
     }

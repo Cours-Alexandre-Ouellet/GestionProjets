@@ -5,14 +5,18 @@ import com.humaininc.gestionprojets.modele.Projet
 import com.humaininc.gestionprojets.service.ServiceBD
 import com.humaininc.gestionprojets.utils.FabriqueCelluleTableBouton
 import com.humaininc.gestionprojets.utils.PropertyValueFactoryStringAgregeeLectureSeule
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.scene.control.Button
 import javafx.scene.control.CheckBox
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
+import java.util.function.Predicate
 
 /**
  * Controleur qui liste les projets. Il est aussi responsable de lancer les opérations d'ouverture et de
@@ -48,16 +52,16 @@ class ControleurListerProjets : ControleurAbstrait() {
     @FXML
     private lateinit var colSupprimer: TableColumn<Projet, Button>
 
-    private lateinit var projets: ObservableList<Projet>
+    private lateinit var projets: FilteredList<Projet>
 
     @FXML
-    fun initialize() {
+    private fun initialize() {
         // TODO: charger uniquement les projets où l'utilisateur a les droits d'acces
-        projets = FXCollections.observableList(
+        projets = FilteredList<Projet>(FXCollections.observableList(
             ProjetDAO(
                 contexte.services.getService<ServiceBD>() as ServiceBD
             ).chargerTout()
-        )
+        ))
 
         nomsProjet.cellValueFactory = PropertyValueFactory("nomProjet")
         createurs.cellValueFactory = PropertyValueFactoryStringAgregeeLectureSeule("createur.nom")
@@ -75,5 +79,25 @@ class ControleurListerProjets : ControleurAbstrait() {
         }
 
         listeProjets.items.setAll(projets)
+
+        // Gestion de l'affichage des projets innactifs
+        afficherProjetsClos.selectedProperty().addListener { _, _, nouvelleValeur ->
+            filtrerProjets(nouvelleValeur)
+        }
+
+        filtrerProjets(afficherProjetsClos.isSelected)
+    }
+
+    /**
+     * Filtre la liste des projets affichés selon la valeur de la case afficherProjetsClos
+     */
+    @FXML
+    private fun filtrerProjets(afficheInnactif:Boolean){
+        projets.predicate = if(afficheInnactif) {
+            Predicate { true }
+        } else {
+            Predicate { projet -> projet.actif }
+        }
+        listeProjets.items = projets
     }
 }

@@ -63,7 +63,8 @@ class ProjetDAO(serviceBD: ServiceBD) : DAOAbstraite<Projet>(serviceBD) {
                 resultats.getDate("date_fin").toLocalDate(),
                 resultats.getString("description"),
                 // TODO : charger de la DAO d'utilisateurs
-                Utilisateur(resultats.getInt("createur"), "Bob")
+                Utilisateur(resultats.getInt("createur"), "Bob"),
+                resultats.getBoolean("actif")
             ))
         }
 
