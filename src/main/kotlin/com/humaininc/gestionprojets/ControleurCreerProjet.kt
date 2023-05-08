@@ -22,7 +22,7 @@ import java.time.format.DateTimeParseException
  * @author Alexandre
  * @since 06/05/2023
  */
-class ControleurCreerProjet : ControleurAbstrait() {
+class ControleurCreerProjet(contexte: Contexte) : ControleurAbstrait(contexte) {
 
     /**
      * Définit les messages de l'interface.

@@ -26,7 +26,7 @@ import java.util.function.Predicate
  * @author Alexandre
  * @since 06/05/2023
  */
-class ControleurListerProjets : ControleurAbstrait() {
+class ControleurListerProjets(contexte: Contexte) : ControleurAbstrait(contexte) {
 
     @FXML
     private lateinit var afficherProjetsClos: CheckBox
@@ -70,7 +70,7 @@ class ControleurListerProjets : ControleurAbstrait() {
         datesFin.cellValueFactory = PropertyValueFactory("dateFin")
         colOuvrir.cellFactory = FabriqueCelluleTableBouton<Projet> ("Ouvrir") {event ->
             run {
-                println((event.source as Button).userData)
+                chargerVue("afficher_projet.fxml", ControleurAfficherProjet(contexte, projets[(event.source as Button).userData as Int]))
             }
         }
         colSupprimer.cellFactory = FabriqueCelluleTableBouton<Projet> ("Supprimer") {event ->
