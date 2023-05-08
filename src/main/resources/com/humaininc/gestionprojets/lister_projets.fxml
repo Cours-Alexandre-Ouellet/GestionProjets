@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      prefHeight="400.0" prefWidth="600.0">
+
+    <Label>Lister les projets</Label>
+
+    <HBox nodeOrientation="RIGHT_TO_LEFT">
+        <Label>Afficher les projets clos</Label>
+        <CheckBox fx:id="afficherProjetsClos"/>
+    </HBox>
+
+    <TableView fx:id="listeProjets">
+        <columns>
+            <TableColumn prefWidth="75.0" text="Nom du projet" fx:id="nomsProjet" editable="false"/>
+            <TableColumn prefWidth="75.0" text="Créateur" fx:id="createurs" editable="false"/>
+            <TableColumn prefWidth="75.0" text="Date de début" fx:id="datesDebut" editable="false"/>
+            <TableColumn prefWidth="75.0" text="Date de fin" fx:id="datesFin" editable="false"/>
+            <TableColumn text="Action">
+                <columns>
+                    <TableColumn prefWidth="75.0" fx:id="colOuvrir" editable="false"/>
+                    <TableColumn prefWidth="75.0" fx:id="colSupprimer" editable="false"/>
+                </columns>
+            </TableColumn>
+        </columns>
+    </TableView>
+
+</VBox>
