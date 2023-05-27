@@ -1,6 +1,8 @@
 package com.humaininc.gestionprojets.dao
 
 import com.humaininc.gestionprojets.service.ServiceBD
+import java.sql.PreparedStatement
+import java.sql.ResultSet
 
 /**
  * Interface commune aux DAO. Elle permet d'enregistrer un objet, charger tous les objets du type
@@ -25,12 +27,25 @@ abstract class DAOAbstraite<T>(serviceBD : ServiceBD) where T : Entite{
      */
     abstract fun enregistrer(entite : T)
 
-    /**
-     * Charge toutes les entitées du type indiqué.
-     *
-     * @return une liste muable du type d'entité demandé
-     */
     abstract fun chargerTout() : MutableList<T>
+
+    /**
+     * Charge toutes les entités du type indiqué. La [requeteSql] indiquée en paramètre récupère les informations
+     * et la méthode [associerBdObjet] est utilisé pour convertir le contenu de la ligne chargée en un objet
+     */
+    protected fun chargerTout(requeteSql: String) : MutableList<T> {
+        val connexion = serviceBD.ouvrirConnexion()
+        val requete: PreparedStatement = connexion.prepareStatement(requeteSql)
+        val resultats: ResultSet = requete.executeQuery()
+        val projets: MutableList<T> = mutableListOf()
+
+        while(resultats.next()){
+            projets.add(associerBdObjet(resultats))
+        }
+
+        serviceBD.fermerConnexion()
+        return projets
+    }
 
     /**
      * Charge une entité selon l'identifiant indiqué.
@@ -39,4 +54,10 @@ abstract class DAOAbstraite<T>(serviceBD : ServiceBD) where T : Entite{
      * @return l'entité chargée.
      */
     abstract fun chargerParId(id : Int) : T
+
+    /**
+     * Converti les données de [ligne] en un objet de type [T]. Cette méthode peut déclencher
+     * des requêtes à la BD.
+     */
+    protected abstract fun associerBdObjet(ligne: ResultSet) : T;
 }

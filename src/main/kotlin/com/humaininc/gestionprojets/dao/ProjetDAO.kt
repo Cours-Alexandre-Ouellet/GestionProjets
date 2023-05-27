@@ -49,31 +49,25 @@ class ProjetDAO(serviceBD: ServiceBD) : DAOAbstraite<Projet>(serviceBD) {
     }
 
 
+
     override fun chargerTout(): MutableList<Projet> {
-        val connexion = serviceBD.ouvrirConnexion()
-        val requete: PreparedStatement = connexion.prepareStatement("SELECT * FROM Projet")
-        val resultats: ResultSet = requete.executeQuery()
-        val projets: MutableList<Projet> = mutableListOf()
-
-        while(resultats.next()){
-            projets.add(Projet(
-                resultats.getInt("id"),
-                resultats.getString("nom_projet"),
-                resultats.getDate("date_debut").toLocalDate(),
-                resultats.getDate("date_fin").toLocalDate(),
-                resultats.getString("description"),
-                // TODO : charger de la DAO d'utilisateurs
-                Utilisateur(resultats.getInt("createur"), "Bob"),
-                resultats.getBoolean("actif")
-            ))
-        }
-
-        serviceBD.fermerConnexion()
-        return projets
+        return chargerTout("SELECT * FROM projet")
     }
 
     override fun chargerParId(id: Int): Projet {
         TODO("Not yet implemented")
+    }
+
+    override fun associerBdObjet(ligne: ResultSet): Projet {
+        return Projet(
+            ligne.getInt("id"),
+            ligne.getString("nom_projet"),
+            ligne.getDate("date_debut").toLocalDate(),
+            ligne.getDate("date_fin").toLocalDate(),
+            ligne.getString("description"),
+            // TODO : charger de la DAO d'utilisateurs
+            Utilisateur(ligne.getInt("createur"), "Bob"),
+            ligne.getBoolean("actif"))
     }
 
 
