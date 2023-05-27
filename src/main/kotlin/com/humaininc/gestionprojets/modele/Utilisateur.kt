@@ -17,4 +17,7 @@ class Utilisateur(id: Int, nom:String) : Entite(id) {
      */
     var nom: String = nom
 
+    override fun toString(): String {
+        return nom
+    }
 }

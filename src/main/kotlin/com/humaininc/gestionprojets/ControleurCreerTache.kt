@@ -4,6 +4,7 @@ import com.humaininc.gestionprojets.dao.UtilisateurDAO
 import com.humaininc.gestionprojets.modele.EtatTache
 import com.humaininc.gestionprojets.modele.Utilisateur
 import com.humaininc.gestionprojets.service.ServiceBD
+import com.humaininc.gestionprojets.utils.ReindicageLigneGridPane
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
@@ -66,6 +67,9 @@ class ControleurCreerTache(contexte: Contexte) : ControleurAbstrait(contexte) {
         affecterPlus()
     }
 
+    /**
+     * Ajoute une ligne de personne affectée au projet
+     */
     private fun affecterPlus() {
         val nouvelleLigne: Pair<Node, Node> = if(personnesAffecteesChoiceList.isEmpty()) {
             fabriqueLigneAffectation.creerLigneAffectationInitiale()
@@ -80,8 +84,13 @@ class ControleurCreerTache(contexte: Contexte) : ControleurAbstrait(contexte) {
 
     }
 
+    /**
+     * Retire une ligne de personne affectée du projet
+     */
     private fun retirerAffectation(indice: Int){
-        print("Test")
+        personnesAffectees.children.removeIf { element -> GridPane.getRowIndex(element) == indice }
+        personnesAffecteesChoiceList.removeAt(indice)
+        ReindicageLigneGridPane.reindicerLigne(personnesAffectees)
     }
 
     private fun annuler() {
@@ -104,7 +113,7 @@ class ControleurCreerTache(contexte: Contexte) : ControleurAbstrait(contexte) {
 
         fun creerLigneAffectation() : Pair<Node, Node> {
             val boutonRetrait = Button("Retirer la personne")
-            boutonRetrait.onAction = EventHandler { evenement -> actionRetrait(0) }     // TODO : retirrer 0 et affecter la bonne valeur
+            boutonRetrait.onAction = EventHandler { evenement -> actionRetrait(GridPane.getRowIndex(evenement.target as Node))}
             return Pair(creerControleSelection(), boutonRetrait)
         }
 
