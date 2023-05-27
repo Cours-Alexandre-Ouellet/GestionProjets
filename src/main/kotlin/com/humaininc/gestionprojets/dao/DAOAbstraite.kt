@@ -30,10 +30,10 @@ abstract class DAOAbstraite<T>(serviceBD : ServiceBD) where T : Entite{
     abstract fun chargerTout() : MutableList<T>
 
     /**
-     * Charge toutes les entités du type indiqué. La [requeteSql] indiquée en paramètre récupère les informations
+     * Charge une liste d'entités du type indiqué. La [requeteSql] indiquée en paramètre récupère les informations
      * et la méthode [associerBdObjet] est utilisé pour convertir le contenu de la ligne chargée en un objet
      */
-    protected fun chargerTout(requeteSql: String) : MutableList<T> {
+    protected fun chargerListe(requeteSql: String) : MutableList<T> {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement = connexion.prepareStatement(requeteSql)
         val resultats: ResultSet = requete.executeQuery()
@@ -48,12 +48,30 @@ abstract class DAOAbstraite<T>(serviceBD : ServiceBD) where T : Entite{
     }
 
     /**
-     * Charge une entité selon l'identifiant indiqué.
-     *
-     * @param id l'identifiant de l'entité à charger.
-     * @return l'entité chargée.
+     * Charge une entité selon l'identifiant [id] indiqué. Si aucun élément ne porte cet [id], alors la valeur null est
+     * retournée.
      */
-    abstract fun chargerParId(id : Int) : T
+    abstract fun chargerParId(id : Int) : T?
+
+    /**
+     * Charge une entité selon l'identifiant [id] indiqué dans la table du nom de [nomTable].
+     * Si aucun élément ne porte cet [id], alors la valeur nulle est retournée. La méthode [associerBdObjet] est utilisée
+     * pour la conversion.
+     */
+    protected fun chargerParId(id : Int, nomTable: String) : T?
+    {
+        val connexion = serviceBD.ouvrirConnexion()
+        var requete : PreparedStatement = connexion.prepareStatement("SELECT * FROM $nomTable WHERE id = ?")
+        requete.setInt(1, id)
+
+        val resultats: ResultSet = requete.executeQuery()
+
+        return if(resultats.next()) {
+             associerBdObjet(resultats)
+        } else {
+            null
+        }
+    }
 
     /**
      * Converti les données de [ligne] en un objet de type [T]. Cette méthode peut déclencher

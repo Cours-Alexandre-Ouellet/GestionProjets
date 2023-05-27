@@ -51,10 +51,10 @@ class ProjetDAO(serviceBD: ServiceBD) : DAOAbstraite<Projet>(serviceBD) {
 
 
     override fun chargerTout(): MutableList<Projet> {
-        return chargerTout("SELECT * FROM projet")
+        return chargerListe("SELECT * FROM projet")
     }
 
-    override fun chargerParId(id: Int): Projet {
+    override fun chargerParId(id: Int): Projet? {
         TODO("Not yet implemented")
     }
 

@@ -11,14 +11,18 @@ class EtatTacheDAO(serviceBD: ServiceBD) : DAOAbstraite<EtatTache>(serviceBD) {
     }
 
     override fun chargerTout(): MutableList<EtatTache> {
-        TODO()
+        return chargerListe("SELECT * FROM EtatTache")
     }
 
-    override fun chargerParId(id: Int): EtatTache {
+    override fun chargerParId(id: Int): EtatTache? {
         TODO("Not yet implemented")
     }
 
     override fun associerBdObjet(ligne: ResultSet): EtatTache {
-        TODO("Not yet implemented")
+        return EtatTache(
+            ligne.getInt("id"),
+            ligne.getString("nom_etat"),
+            ligne.getInt("ordre")
+        )
     }
 }
