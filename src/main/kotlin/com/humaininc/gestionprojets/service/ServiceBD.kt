@@ -12,26 +12,6 @@ import java.sql.DriverManager
 class ServiceBD : IService {
 
     /**
-     * Définition des constantes de la BD
-     */
-    companion object {
-        /**
-         * Hôte de la BD
-         */
-        private const val HOTE : String = "jdbc:mysql://127.0.0.1:3306/gestionprojets"
-
-        /**
-         * Nom de l'utilisateur
-         */
-        private const val UTILISATEUR : String = "root"
-
-        /**
-         * Mot de passe
-         */
-        private const val MOT_DE_PASSE : String = "mysql"
-    }
-
-    /**
      * Contient la connexion à la base de données
      */
     private lateinit var connexion : Connection
@@ -61,5 +41,25 @@ class ServiceBD : IService {
         if(!connexion.isClosed) {
             connexion.close()
         }
+    }
+
+    /**
+     * Définition des constantes de la BD
+     */
+    companion object {
+        /**
+         * Hôte de la BD
+         */
+        private const val HOTE : String = "jdbc:mysql://127.0.0.1:3306/gestionprojets"
+
+        /**
+         * Nom de l'utilisateur
+         */
+        private const val UTILISATEUR : String = "root"
+
+        /**
+         * Mot de passe
+         */
+        private const val MOT_DE_PASSE : String = "mysql"
     }
 }
