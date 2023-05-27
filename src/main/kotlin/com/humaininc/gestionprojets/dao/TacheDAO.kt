@@ -33,10 +33,10 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
         requete.executeUpdate()
 
         if(estInsertion) {
-            val cleGenere : ResultSet = requete.generatedKeys
+            val cleGeneree : ResultSet = requete.generatedKeys
 
-            if(cleGenere.next()) {
-                entite.id = cleGenere.getInt(1)
+            if(cleGeneree.next()) {
+                entite.id = cleGeneree.getInt(1)
             }
         }
 
