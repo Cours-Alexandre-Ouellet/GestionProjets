@@ -11,13 +11,6 @@ import kotlin.reflect.full.primaryConstructor
  */
 class ConteneurService {
 
-    companion object {
-        /**
-         * Liste des services de l'application
-         */
-        val services: MutableList<IService> = mutableListOf()
-    }
-
     /**
      * Retourne le service demandé. Si le service n'existe pas, il est créé avant d'être retourné.
      *
@@ -42,5 +35,12 @@ class ConteneurService {
             throw  Exception("Impossible de créer le service de type : ${T::class.simpleName}")
         }
 
+    }
+
+    companion object {
+        /**
+         * Liste des services de l'application
+         */
+        val services: MutableList<IService> = mutableListOf()
     }
 }
