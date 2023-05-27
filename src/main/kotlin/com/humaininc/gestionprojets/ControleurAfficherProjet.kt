@@ -25,6 +25,6 @@ class ControleurAfficherProjet(contexte: Contexte, projet: Projet) : ControleurA
     @FXML
     private fun initialize() {
         nomProjet.text = projet.nomProjet
-        ajouterTache.onAction = EventHandler { _ -> chargerVue("creer_tache", ControleurCreerTache(contexte)) }
+        ajouterTache.onAction = EventHandler { _ -> chargerVue("creer_tache.fxml", ControleurCreerTache(contexte)) }
     }
 }

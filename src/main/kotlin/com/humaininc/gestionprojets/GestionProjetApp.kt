@@ -15,8 +15,8 @@ import javafx.stage.Stage
 class GestionProjetApp : Application() {
 
     override fun start(stage: Stage) {
-        val chargeur = FXMLLoader(GestionProjetApp::class.java.getResource("creer_tache.fxml"))
-        chargeur.setController(ControleurCreerTache(Contexte(stage)))
+        val chargeur = FXMLLoader(GestionProjetApp::class.java.getResource("lister_projets.fxml"))
+        chargeur.setController(ControleurListerProjets(Contexte(stage)))
         val parent : Parent = chargeur.load()
 
 
