@@ -4,15 +4,16 @@ import com.humaininc.gestionprojets.dao.UtilisateurDAO
 import com.humaininc.gestionprojets.modele.EtatTache
 import com.humaininc.gestionprojets.modele.Utilisateur
 import com.humaininc.gestionprojets.service.ServiceBD
+import com.humaininc.gestionprojets.utils.CelluleUtilisateur
 import com.humaininc.gestionprojets.utils.ReindicageLigneGridPane
 import javafx.collections.FXCollections
-import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.scene.text.Text
+import javafx.util.Callback
 
 /**
  * Contrôleur responsable de la création de tâche. Il reçoit le [contexte] d'application en paramètre.
@@ -106,22 +107,40 @@ class ControleurCreerTache(contexte: Contexte) : ControleurAbstrait(contexte) {
      */
     internal class FabriqueLigneAffectation(private val contexte: Contexte,
                                             private val actionRetrait : (Int) -> Unit) {
-
-        fun creerLigneAffectationInitiale() : Pair<Node, Node> {
+        /*
+         * Crée une nouvelle ligne avec un message d'erreur possible pour les utilisateurs affectés. Retourne la zone
+         * de sélection et le message d'erreur
+         */
+        fun creerLigneAffectationInitiale(): Pair<Node, Node> {
             return Pair(creerControleSelection(), Label())
         }
 
-        fun creerLigneAffectation() : Pair<Node, Node> {
+        /**
+         * Crée un nouvelle ligne avec un bouton de retrait. Retourne la zone de sélection et le bouton de retrait.
+         */
+        fun creerLigneAffectation(): Pair<Node, Node> {
             val boutonRetrait = Button("Retirer la personne")
-            boutonRetrait.onAction = EventHandler { evenement -> actionRetrait(GridPane.getRowIndex(evenement.target as Node))}
+            boutonRetrait.onAction =
+                EventHandler { evenement -> actionRetrait(GridPane.getRowIndex(evenement.target as Node)) }
             return Pair(creerControleSelection(), boutonRetrait)
         }
 
-        fun creerControleSelection() : Node {
-            return ChoiceBox(FXCollections.observableList(
-                UtilisateurDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout()
-            ))
+        /**
+         * Crée un contrôle de sélection pour un utilisateur à affecter au projet.
+         */
+        private fun creerControleSelection(): Node {
+            val choixUtilisateur = ComboBox(
+                FXCollections.observableList(
+                    UtilisateurDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout()        // TODO : charge seulement les autorises au projet
+                )
+            )
+
+            choixUtilisateur.cellFactory = Callback<ListView<Utilisateur>, ListCell<Utilisateur>> {CelluleUtilisateur()}
+            choixUtilisateur.buttonCell = CelluleUtilisateur()
+
+            return choixUtilisateur
         }
+
 
     }
 }

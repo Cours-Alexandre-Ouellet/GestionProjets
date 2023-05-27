@@ -16,8 +16,4 @@ class Utilisateur(id: Int, nom:String) : Entite(id) {
      * Nom d'utilisateur dans le système.
      */
     var nom: String = nom
-
-    override fun toString(): String {
-        return nom
-    }
 }
