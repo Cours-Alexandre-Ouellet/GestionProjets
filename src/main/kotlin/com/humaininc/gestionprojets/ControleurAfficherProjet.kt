@@ -1,7 +1,9 @@
 package com.humaininc.gestionprojets
 
 import com.humaininc.gestionprojets.modele.Projet
+import javafx.event.EventHandler
 import javafx.fxml.FXML
+import javafx.scene.control.Button
 import javafx.scene.control.Label
 
 /**
@@ -18,7 +20,11 @@ class ControleurAfficherProjet(contexte: Contexte, projet: Projet) : ControleurA
     private lateinit var nomProjet: Label
 
     @FXML
+    private lateinit var ajouterTache: Button
+
+    @FXML
     private fun initialize() {
         nomProjet.text = projet.nomProjet
+        ajouterTache.onAction = EventHandler { _ -> chargerVue("creer_tache", ControleurCreerTache(contexte)) }
     }
 }
