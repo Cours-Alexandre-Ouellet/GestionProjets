@@ -30,6 +30,7 @@ CREATE TABLE tache (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	nom_tache VARCHAR(255) NOT NULL,
     date_realisation_prevue DATE,
+    description TEXT,
     projet INTEGER NOT NULL,
     createur INTEGER NOT NULL,
     etat INTEGER NOT NULL,
@@ -62,6 +63,4 @@ INSERT INTO projet (nom_projet, date_debut, date_fin, description, createur, act
     ('Projet de Bob 2', '2022-07-12', '2022-08-18', 'DESC', 1, FALSE);
 
 INSERT INTO etattache (nom_etat, ordre) VALUES
-	('À faire', 1),
-    ('En cours', 2),
-    ('Terminée', 3);
+	('ETAT TEST', 1);

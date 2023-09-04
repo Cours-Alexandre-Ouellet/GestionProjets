@@ -98,6 +98,12 @@ class ControleurCreerTache(contexte: Contexte, val projet : Projet) : Controleur
         ReindicageLigneGridPane.reindicerLigne(personnesAffectees)
     }
 
+    private fun recupererUtilisateursAffectes() : List<Utilisateur> {
+        return personnesAffecteesChoiceList.map { affecation ->
+                (affecation as ComboBox<Utilisateur>).selectionModel.selectedItem as Utilisateur
+        }
+    }
+
     private fun annuler() {
 
     }
@@ -109,14 +115,16 @@ class ControleurCreerTache(contexte: Contexte, val projet : Projet) : Controleur
             dateRelatisationPrevue = dateRealisationPrevue.value,
             description = description.text,
             projet = projet,
-            affectes = personnesAffecteesChoiceList.map { n -> n.userData as Utilisateur },
+            affectes = recupererUtilisateursAffectes(),
             createur = contexte.utilisateurConnecte!!,
-            etat = EtatTache(0, "ETAT TEST", 0),        // TODO: etat par défaut du projet
+            etat = EtatTache(1, "ETAT TEST", 0),        // TODO: etat par défaut du projet
             importance = true
         )
 
         TacheDAO(contexte.services.getService<ServiceBD>() as ServiceBD).enregistrer(nouvelleTache)
     }
+
+
 
     /**
      * Crée des blocs de contrôle pour la sélection de personnes affectées.
@@ -151,12 +159,11 @@ class ControleurCreerTache(contexte: Contexte, val projet : Projet) : Controleur
                 )
             )
 
-            choixUtilisateur.cellFactory = Callback<ListView<Utilisateur>, ListCell<Utilisateur>> {CelluleUtilisateur()}
+            choixUtilisateur.cellFactory =
+                Callback<ListView<Utilisateur>, ListCell<Utilisateur>> { CelluleUtilisateur() }
             choixUtilisateur.buttonCell = CelluleUtilisateur()
 
             return choixUtilisateur
         }
-
-
     }
 }
