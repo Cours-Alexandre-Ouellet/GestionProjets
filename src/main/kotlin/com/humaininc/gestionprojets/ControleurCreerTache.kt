@@ -1,7 +1,10 @@
 package com.humaininc.gestionprojets
 
+import com.humaininc.gestionprojets.dao.TacheDAO
 import com.humaininc.gestionprojets.dao.UtilisateurDAO
 import com.humaininc.gestionprojets.modele.EtatTache
+import com.humaininc.gestionprojets.modele.Projet
+import com.humaininc.gestionprojets.modele.Tache
 import com.humaininc.gestionprojets.modele.Utilisateur
 import com.humaininc.gestionprojets.service.ServiceBD
 import com.humaininc.gestionprojets.utils.CelluleUtilisateur
@@ -16,9 +19,10 @@ import javafx.scene.text.Text
 import javafx.util.Callback
 
 /**
- * Contrôleur responsable de la création de tâche. Il reçoit le [contexte] d'application en paramètre.
+ * Contrôleur responsable de la création de tâche. Il reçoit le [contexte] d'application en paramètre et le [projet]
+ * dans lequel la tâche sera créé
  */
-class ControleurCreerTache(contexte: Contexte) : ControleurAbstrait(contexte) {
+class ControleurCreerTache(contexte: Contexte, val projet : Projet) : ControleurAbstrait(contexte) {
 
     @FXML
     private lateinit var nomTache : TextField
@@ -99,7 +103,19 @@ class ControleurCreerTache(contexte: Contexte) : ControleurAbstrait(contexte) {
     }
 
     private fun creerTache() {
+        val nouvelleTache = Tache(
+            id = null,
+            nom = nomTache.text,
+            dateRelatisationPrevue = dateRealisationPrevue.value,
+            description = description.text,
+            projet = projet,
+            affectes = personnesAffecteesChoiceList.map { n -> n.userData as Utilisateur },
+            createur = contexte.utilisateurConnecte!!,
+            etat = EtatTache(0, "ETAT TEST", 0),        // TODO: etat par défaut du projet
+            importance = true
+        )
 
+        TacheDAO(contexte.services.getService<ServiceBD>() as ServiceBD).enregistrer(nouvelleTache)
     }
 
     /**
