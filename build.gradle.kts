@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.8.20"
     id("org.openjfx.javafxplugin") version "0.0.8"
 }
 
@@ -14,7 +14,7 @@ repositories {
 }
 
 application {
-    mainClassName = "com.humaininc.gestionprojets.LanceurAppKt"
+    mainClass.set("com.humaininc.gestionprojets.LanceurAppKt")
 }
 
 dependencies {
@@ -36,6 +36,6 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "17"
 }
 
